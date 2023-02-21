@@ -1,2 +1,4 @@
-package net.wonsi.serialization;public interface SerializedSource {
+package net.wonsi.serialization;
+
+public interface SerializedSource {
 }

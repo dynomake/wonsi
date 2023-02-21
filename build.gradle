@@ -1,19 +1,46 @@
 plugins {
     id 'java'
+    id 'maven-publish'
 }
 
-group 'net.wonsi'
-version '1.0-SNAPSHOT'
+group 'works.naifu'
+version '1.1.0'
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+    implementation 'com.google.code.gson:gson:2.8.7'
+    compileOnly 'org.projectlombok:lombok:1.18.24'
+    annotationProcessor 'org.projectlombok:lombok:1.18.24'
+    implementation 'org.reflections:reflections:0.10.2'
+    testCompileOnly 'org.projectlombok:lombok:1.18.24'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.24'
+    implementation 'javax.persistence:javax.persistence-api:2.2'
+    testImplementation group: 'mysql', name: 'mysql-connector-java', version: '5.1.47'
+    implementation group: 'commons-codec', name: 'commons-codec', version: '1.15'
+
 }
 
-test {
-    useJUnitPlatform()
+publishing {
+    repositories {
+        maven {
+            name = "clojars"
+            url = uri("https://clojars.org/repo")
+            credentials {
+                username = clojarsUserName
+                password = clojarsDeployToken
+            }
+        }
+
+    }
+    publications {
+        gpr(MavenPublication) {
+            from(components.java)
+        }
+    }
 }

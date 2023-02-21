@@ -1,4 +1,4 @@
-## | `Lithe DI`
+## | `Wonsi Objest Mapping`
 A small & fast but convenient framework for working with dependencies. I'll add dependency injection soon.
 
 ### | `Links`:

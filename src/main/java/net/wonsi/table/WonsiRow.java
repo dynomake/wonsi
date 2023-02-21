@@ -1,2 +1,8 @@
-package net.wonsi;public class WonsiRow {
+package net.wonsi.table;
+
+import lombok.NonNull;
+
+public interface WonsiRow {
+
+    String getValue(@NonNull String column);
 }
