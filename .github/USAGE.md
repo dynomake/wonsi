@@ -1,4 +1,4 @@
-## | `Lithe DI - Usage:`
+## | `Wonsi - Usage:`
 *You can found full example-code in:* [LINK](https://github.com/suuft/wonsi/tree/master/src/test/java/net/wonsi/test)
 
 First, lets create an application class that ll run the JVM. E.i. - Main:
