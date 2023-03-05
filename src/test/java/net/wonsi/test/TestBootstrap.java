@@ -6,8 +6,6 @@ import net.wonsi.api.table.WonsiTable;
 import net.wonsi.test.model.User;
 import net.wonsi.test.mysql.MySqlUtil;
 import net.wonsi.test.repo.UserRepo;
-import net.wonsi.util.Condition;
-import net.wonsi.util.StringUtil;
 
 public class TestBootstrap {
 
@@ -17,14 +15,13 @@ public class TestBootstrap {
 
        UserRepo repository = new UserRepo(table);
 
-
-       // допустим у валеры есть друзьяшки
+       // okay, i have friends
        repository.save(new User(1, "https://vk.com/suuft", "@fuuft"));
        repository.save(new User(2, "https://vk.com/itzstonlex", null));
        repository.save(new User(3, "https://vk.com/frotter_", null));
        repository.save(new User(4, "https://vk.com/aquantixx", null));
 
-       // но фроттер кинул валеру на 900 рублей
+       // OOOHH NOOO!!! Frotter cheated on me and we re not friends now.
         repository.delete(3);
     }
 }

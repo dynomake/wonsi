@@ -1,5 +1,5 @@
 ## | `Lithe DI - Usage:`
-*You can found full example-code in:* [LINK](https://github.com/suuft/Lithe/tree/master/src/test/java/net/lithe/test)
+*You can found full example-code in:* [LINK](https://github.com/suuft/wonsi/tree/master/src/test/java/net/wonsi/test)
 
 First, lets create an application class that ll run the JVM. E.i. - Main:
 ```java
@@ -9,55 +9,94 @@ public class Main {
     }
 }
 ```
-Lets create an abstract class (an interface, but you can create abstract class or a simple class) that ll have abstract methods for working with some data. I have this as metric, so this class ll count the number of sessions:
+Create an object that we will store. For example a user:
 ```java
-public interface SessionCounter {
-    int getSessions();
-    void incrementSessions();
-}
-```
-Okay come write it s implementation:
-```java
-public class MySessionCounter implements SessionCounter {
+// lombok helpers annotation, not required (setters, getters, constructors generation)
+@Setter
+@Getter
+@AllArgsConstructor
+// wonsi required annotation
+@Table("app_users")
+public class User {
 
-    private int sessions;
+    @WonsiPrimary
+    @WonsiColumn(name = "identifier")
+    private long identifier;
 
-    @Override
-    public int getSessions() {
-        return sessions;
-    }
+    @WonsiColumn(name = "vk")
+    private String vkLink;
 
-    @Override
-    public void incrementSessions() {
-        sessions++;
-    }
-}
-```
-Good job! You should write a class that register dependencies, for further using - Adept, it will extends from `SimpleAdept`:
-```java
-public class CounterAdept extends SimpleAdept {
-    @Override
-    public void install() {
-        register(SessionCounter.class, MySessionCounter.class);
+    @WonsiColumn(name = "tg")
+    private String tgId;
+
+    public static User deserialize(ResultSet data) {
+        try {
+            return new User(data.getInt("identifier"), data.getString("vk"), data.getString("tg"));
+        } catch (Exception exception) {
+            throw new RuntimeException(exception);
+        }
     }
 }
 ```
-Done! So you can create an injector through the `Lithe` class and use the registered dependencies. I wrote an example in the Main class.
+Cool, now lets create a repository that would manage users (CRUD operations):
 ```java
-public class Main {
+@RequiredArgsConstructor
+public class UserRepo {
+
+    private final WonsiTable<User> table;
+
+    public User getByLogin(String login) {
+        return table
+                .select()
+                .where(Condition.is("login", login))
+                .limit(1)
+                .sync()
+                .findFirst();
+    }
+
+    public Collection<User> getAll() {
+        return table
+                .select()
+                .sync()
+                .getAll();
+    }
+
+    public void save(User user) {
+        table.insert()
+                .updateOnDuplicate()
+                .data(map -> {
+                    map.put("identifier", user.getIdentifier());
+                    map.put("vk", user.getVkLink());
+                    map.put("tg", user.getTgId());
+                })
+                .sync();
+    }
+
+    public void delete(int identifier) {
+        table.delete()
+                .where(Condition.is("identifier", identifier))
+                .limit(1)
+                .sync();
+    }
+}
+```
+Super, now we can create an instance of the repository and do anything! Just look:
+```java
+public class TestBootstrap {
 
     public static void main(String[] args) {
-        Injector injector = Lithe.createInjector(new CounterAdept());
-        System.out.println("Current sessions: " + injector.getInstance(SessionCounter.class).getSessions());
+       Wonsi wonsi = WonsiFactory.createInstance(YOU_SQL_DATABASE_CONNECTION);
+       WonsiTable<User> table = wonsi.getTable(User.class, User::deserialize);
 
-        System.out.println("Try increment #1");
-        injector.getInstance(SessionCounter.class).incrementSessions();
+       UserRepo repository = new UserRepo(table);
 
-        System.out.println("Try increment #2");
-        injector.getInstance(SessionCounter.class).incrementSessions();
+       // okay, i have friends
+       repository.save(new User(1, "https://vk.com/suuft", "@fuuft"));
+       repository.save(new User(2, "https://vk.com/otherman", null));
 
-        System.out.println("Current sessions: " + injector.getInstance(SessionCounter.class).getSessions());
+       // OOOHH NOOO!!! Otherman cheated on me and we re not friends now.
+        repository.delete(2);
     }
 }
 ```
-The final output will show us the number 2. So you did everything right. Cool!
+Well done, I hope this development will help you :heart:

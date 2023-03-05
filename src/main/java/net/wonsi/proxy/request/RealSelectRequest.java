@@ -4,7 +4,8 @@ import net.wonsi.api.request.SelectRequest;
 import net.wonsi.api.result.ExecutedReturningAction;
 import net.wonsi.proxy.result.RealExecutedReturningAction;
 import net.wonsi.util.Condition;
-import net.wonsi.util.Debugger;
+import net.wonsi.util.ExecutorUtil;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -40,7 +41,7 @@ public class RealSelectRequest<T> implements SelectRequest<T> {
 
             statement.setInt(1, limit);
 
-            return new RealExecutedReturningAction<T>(Debugger.getResult(statement, connection), deserializer);
+            return new RealExecutedReturningAction<T>(ExecutorUtil.getResult(statement, connection), deserializer);
         } catch (Exception exception) {
             exception.printStackTrace();
             return null;

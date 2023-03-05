@@ -1,15 +1,12 @@
 package net.wonsi.proxy.request;
 
 import net.wonsi.api.request.DeleteRequest;
-import net.wonsi.proxy.result.RealExecutedReturningAction;
 import net.wonsi.util.Condition;
-import net.wonsi.util.Debugger;
+import net.wonsi.util.ExecutorUtil;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.Function;
 
 public class RealDeleteRequest implements DeleteRequest {
 
@@ -50,7 +47,7 @@ public class RealDeleteRequest implements DeleteRequest {
 
             statement.setInt(1, limit);
 
-            Debugger.execute(statement, connection);
+            ExecutorUtil.execute(statement, connection);
         } catch (Exception exception) {
             exception.printStackTrace();
         }

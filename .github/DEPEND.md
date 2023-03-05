@@ -1,4 +1,4 @@
-## | `Lithe DI - Add as depend:`
+## | `Wonsi - Add as depend:`
 Here is how to add this framework depending on your project.
 ### | `Gradle`:
 If you use Gradle with Groovy, then here is an example of adding dependencies:
@@ -13,7 +13,7 @@ repositories {
 
 dependencies {
     // other depends
-    implementation 'works.naifu:lithe:2.1.1'
+    implementation 'works.naifu:wonsi:1.0.0'
 }
 ```
 
@@ -34,7 +34,7 @@ Depend:
 
 <dependency>
     <groupId>works.naifu</groupId>
-    <artifactId>lithe</artifactId>
-    <version>2.1.1</version>
+    <artifactId>wonsi</artifactId>
+    <version>1.0.0</version>
 </dependency>
 ```

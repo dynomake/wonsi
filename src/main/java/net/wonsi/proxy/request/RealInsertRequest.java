@@ -2,15 +2,13 @@ package net.wonsi.proxy.request;
 
 import com.google.common.base.Joiner;
 import net.wonsi.api.request.InsertRequest;
-import net.wonsi.proxy.result.RealExecutedReturningAction;
-import net.wonsi.util.Debugger;
+import net.wonsi.util.ExecutorUtil;
 import net.wonsi.util.StringUtil;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.StringJoiner;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
@@ -77,7 +75,7 @@ public class RealInsertRequest<T> implements InsertRequest<T> {
                 }
             }
 
-            Debugger.execute(statement, connection);
+            ExecutorUtil.execute(statement, connection);
         } catch (Exception exception) {
             exception.printStackTrace();
         }
