@@ -2,13 +2,13 @@ package net.wonsi.proxy;
 
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
-import net.wonsi.Wonsi;
-import net.wonsi.database.WonsiDatabase;
-import net.wonsi.proxy.database.RealWonsiDatabase;
-
+import net.wonsi.api.Wonsi;
+import net.wonsi.api.mapping.Table;
+import net.wonsi.api.table.WonsiTable;
+import net.wonsi.proxy.table.RealWonsiTable;
 import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.ResultSet;
+import java.util.function.Function;
 
 @AllArgsConstructor
 public class RealWonsi implements Wonsi {
@@ -16,13 +16,16 @@ public class RealWonsi implements Wonsi {
     private Connection connection;
 
     @Override
-    public WonsiDatabase getDatabase(@NonNull String database) {
-        try (Statement statement = connection.createStatement()) {
-            statement.executeQuery("CREATE DATABASE IF NOT EXISTS `" + database + "`");
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+    public <T> WonsiTable<T> getTable(@NonNull Class<T> tClass, @NonNull Function<ResultSet, T> deserializer) {
+        Table tableAnnotation = tClass.getAnnotation(Table.class);
 
-        return new RealWonsiDatabase(connection);
+        if (tableAnnotation == null) throw new IllegalArgumentException("Class don't has annotation @Table, please read documentation!");
+
+
+        WonsiTable<T> table = new RealWonsiTable<>(connection, deserializer, tableAnnotation.value());
+        table.createIfNotExits(tClass);
+
+        return table;
     }
+
 }

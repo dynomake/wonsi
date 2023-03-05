@@ -1,6 +1,7 @@
 package net.wonsi;
 
 import lombok.experimental.UtilityClass;
+import net.wonsi.api.Wonsi;
 import net.wonsi.proxy.RealWonsi;
 
 import java.sql.Connection;
