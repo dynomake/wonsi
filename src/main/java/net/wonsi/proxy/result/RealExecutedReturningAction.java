@@ -6,6 +6,7 @@ import net.wonsi.api.result.ExecutedReturningAction;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Optional;
 import java.util.function.Function;
 
 public class RealExecutedReturningAction<T> implements ExecutedReturningAction<T> {
@@ -33,8 +34,8 @@ public class RealExecutedReturningAction<T> implements ExecutedReturningAction<T
     }
 
     @Override
-    public T findFirst() {
-        return response.stream().findFirst().orElse(null);
+    public Optional<T> findFirst() {
+        return response.stream().findFirst();
     }
 
     @Override

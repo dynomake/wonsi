@@ -3,8 +3,8 @@ plugins {
     id 'maven-publish'
 }
 
-group 'works.naifu'
-version '1.0.0'
+group 'io.github.dynomake'
+version '1.0.2'
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }
@@ -39,6 +39,15 @@ publishing {
     publications {
         gpr(MavenPublication) {
             from(components.java)
+
+            pom {
+                licenses {
+                    license {
+                        name = 'MIT License'
+                        url = 'https://github.com/dynomake/wonsi/blob/master/LICENSE'
+                    }
+                }
+            }
         }
     }
 }

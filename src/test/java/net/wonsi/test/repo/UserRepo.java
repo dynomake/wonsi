@@ -26,7 +26,7 @@ public class UserRepo {
                 .where(Condition.is("login", login))
                 .limit(1)
                 .sync()
-                .findFirst();
+                .findFirst().get();
     }
 
     public Collection<User> getAll() {

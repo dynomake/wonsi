@@ -7,6 +7,7 @@ import net.wonsi.column.type.*;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,9 +37,12 @@ public class ColumnUtil {
         TYPE_MAP.put(float.class, new FloatType());
         TYPE_MAP.put(double.class, new FloatType());
         TYPE_MAP.put(BigDecimal.class, new FloatType());
+        TYPE_MAP.put(Collection.class, new JsonType());
     }
 
     public ColumnType get(@NonNull Class<?> javaType) {
+        if (javaType.isAssignableFrom(Collection.class)) return new JsonType();
+
         return TYPE_MAP.getOrDefault(javaType, new VarcharType());
     }
 }

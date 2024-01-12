@@ -13,7 +13,7 @@ repositories {
 
 dependencies {
     // other depends
-    implementation 'works.naifu:wonsi:1.0.0'
+    implementation 'io.github.dynomake:wonsi:1.0.2'
 }
 ```
 
@@ -33,8 +33,8 @@ Depend:
 ```xml
 
 <dependency>
-    <groupId>works.naifu</groupId>
+    <groupId>io.github.dynomake</groupId>
     <artifactId>wonsi</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.2</version>
 </dependency>
 ```

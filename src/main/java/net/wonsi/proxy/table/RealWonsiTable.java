@@ -76,7 +76,7 @@ public class RealWonsiTable<T> implements WonsiTable<T> {
 
         for (Field field : tclass.getDeclaredFields()) {
             WonsiColumn column = field.getAnnotation(WonsiColumn.class);
-            arguments.add(column.name() + ' ' + ColumnUtil.get(field.getType()).convertToString(column.length()) + field.getAnnotation(WonsiPrimary.class) != null ? " PRIMARY KEY" : "");
+            arguments.add(column.name() + ' ' + ColumnUtil.get(field.getType()).convertToString(column.length()) + (field.getAnnotation(WonsiPrimary.class) != null ? " PRIMARY KEY" : ""));
         }
 
         StringBuilder query = new StringBuilder("CREATE TABLE IF NOT EXISTS `");
