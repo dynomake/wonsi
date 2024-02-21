@@ -11,6 +11,7 @@ public interface WonsiTable<T> {
     DeleteRequest delete();
     UpdateRequest update();
 
+    String getName();
     ExecutedReturningAction<T> customSelect(@NonNull String query);
     Request customQuery(@NonNull String query);
 

@@ -1,7 +1,8 @@
 package net.wonsi.proxy.table;
 
-import lombok.AllArgsConstructor;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.val;
 import net.wonsi.api.mapping.WonsiColumn;
 import net.wonsi.api.mapping.WonsiPrimary;
 import net.wonsi.api.request.*;
@@ -23,12 +24,13 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class RealWonsiTable<T> implements WonsiTable<T> {
 
-    private Connection connection;
-    private Function<ResultSet, T> deserializer;
-    private String tableName;
+    private final Connection connection;
+    private final Function<ResultSet, T> deserializer;
+    private final String tableName;
+    private String primaryKeyName;
 
     @Override
     public SelectRequest<T> select() {
@@ -37,7 +39,7 @@ public class RealWonsiTable<T> implements WonsiTable<T> {
 
     @Override
     public InsertRequest<T> insert() {
-        return new RealInsertRequest<T>(connection, tableName);
+        return new RealInsertRequest<T>(connection, tableName, primaryKeyName);
     }
 
     @Override
@@ -48,6 +50,11 @@ public class RealWonsiTable<T> implements WonsiTable<T> {
     @Override
     public UpdateRequest update() {
         return new RealUpdateRequest(connection, tableName);
+    }
+
+    @Override
+    public String getName() {
+        return tableName;
     }
 
     @Override
@@ -76,7 +83,10 @@ public class RealWonsiTable<T> implements WonsiTable<T> {
 
         for (Field field : tclass.getDeclaredFields()) {
             WonsiColumn column = field.getAnnotation(WonsiColumn.class);
-            arguments.add(column.name() + ' ' + ColumnUtil.get(field.getType()).convertToString(column.length()) + (field.getAnnotation(WonsiPrimary.class) != null ? " PRIMARY KEY" : ""));
+            val primary = (field.getAnnotation(WonsiPrimary.class) != null ? " PRIMARY KEY" : "");
+            arguments.add(column.name() + ' ' + ColumnUtil.get(field.getType()).convertToString(column.length()) + primary);
+            if (!primary.isEmpty())
+                primaryKeyName = column.name();
         }
 
         StringBuilder query = new StringBuilder("CREATE TABLE IF NOT EXISTS `");

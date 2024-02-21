@@ -1,6 +1,7 @@
 package net.wonsi.proxy.request;
 
 import com.google.common.base.Joiner;
+import lombok.val;
 import net.wonsi.api.request.InsertRequest;
 import net.wonsi.util.ExecutorUtil;
 import net.wonsi.util.StringUtil;
@@ -20,12 +21,15 @@ public class RealInsertRequest<T> implements InsertRequest<T> {
     private int limit;
     private boolean fixDuplicate;
     private Map<String, Object> data;
+    private final String primaryKeyName;
 
-    public RealInsertRequest(Connection connection, String tableName) {
+    public RealInsertRequest(Connection connection, String tableName, String primaryKeyName) {
         this.connection = connection;
         this.tableName = tableName;
+        this.primaryKeyName = primaryKeyName;
         condition = "1";
         limit = 10;
+
     }
 
     @Override
@@ -58,7 +62,14 @@ public class RealInsertRequest<T> implements InsertRequest<T> {
     @Override
     public void sync() {
         try {
-            PreparedStatement statement = connection.prepareStatement("INSERT INTO " + tableName + " (" + Joiner.on(",").join(data.keySet()) + ") VALUES (" + StringUtil.repeat(",?", data.size()).replaceFirst(",", "")+ ")" + (fixDuplicate ? " ON DUPLICATE KEY UPDATE " + Joiner.on("= ?,").join(data.keySet()) + " = ?" : ""));
+            val mapWithoutPrimary = new HashMap<>(data);
+            if (fixDuplicate) {
+                mapWithoutPrimary.remove(primaryKeyName);
+            }
+            val end = (fixDuplicate ? " ON DUPLICATE KEY UPDATE " + Joiner.on("= ?,").join(mapWithoutPrimary.keySet()) + " = ?" : "");
+            val query = "INSERT INTO " + tableName + " (" + Joiner.on(",").join(data.keySet()) + ") VALUES (" + StringUtil.repeat(",?", data.size()).replaceFirst(",", "")+ ")" + end;
+//            System.out.println(query);
+            PreparedStatement statement = connection.prepareStatement(query);
 
             int currentArgument = 1;
 
@@ -69,7 +80,7 @@ public class RealInsertRequest<T> implements InsertRequest<T> {
 
             if (fixDuplicate){
 //                currentArgument = currentArgument-2;
-                for (Object o : data.values()) {
+                for (Object o : mapWithoutPrimary.values()) {
                     statement.setObject(currentArgument, o);
                     currentArgument++;
                 }

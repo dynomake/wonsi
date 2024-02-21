@@ -10,7 +10,10 @@ public class Condition {
     private String condition;
 
     public static Condition is(@NonNull String column, @NonNull Object value) {
-        return new Condition('`' + column + '`' + " = " + value);
+        if (value instanceof String)
+            return new Condition(column + " = " + "'" + value + "'");
+
+        return new Condition(column + " = " + value);
     }
 
     public static Condition over(@NonNull String column, @NonNull Object value) {
