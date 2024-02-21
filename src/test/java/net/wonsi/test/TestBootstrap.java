@@ -1,5 +1,6 @@
 package net.wonsi.test;
 
+import lombok.SneakyThrows;
 import net.wonsi.WonsiFactory;
 import net.wonsi.api.Wonsi;
 import net.wonsi.api.table.WonsiTable;
@@ -7,8 +8,11 @@ import net.wonsi.test.model.User;
 import net.wonsi.test.mysql.MySqlUtil;
 import net.wonsi.test.repo.UserRepo;
 
+import java.sql.DriverManager;
+
 public class TestBootstrap {
 
+    @SneakyThrows
     public static void main(String[] args) {
        Wonsi wonsi = WonsiFactory.createInstance(MySqlUtil.create());
        WonsiTable<User> table = wonsi.getTable(User.class, User::deserialize);

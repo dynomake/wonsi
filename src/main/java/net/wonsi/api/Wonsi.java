@@ -19,4 +19,15 @@ public interface Wonsi {
      * @return - wonsi table handle
      */
     <T> WonsiTable<T> getTable(@NonNull Class<T> tClass, @NonNull Function<ResultSet, T> deserializer);
+
+
+    /**
+     * Get or create (if not exits) table by class
+     * if you are using this way with auto-serialisation & de, you can
+     * use only long number types. DO NOT USE Long, int, short, Integer.
+     *
+     * @param tClass - class
+     * @return - wonsi table handle
+     */
+    <T> WonsiTable<T> getTable(@NonNull Class<T> tClass);
 }

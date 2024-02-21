@@ -42,12 +42,7 @@ public class RealDeleteRequest implements DeleteRequest {
     @Override
     public void sync() {
         try {
-            PreparedStatement statement = connection
-                    .prepareStatement("DELETE FROM " + tableName + " WHERE " + condition + " LIMIT ?");
-
-            statement.setInt(1, limit);
-
-            ExecutorUtil.execute(statement, connection);
+            ExecutorUtil.execute("DELETE FROM " + tableName + " WHERE " + condition + " LIMIT " + limit, connection);
         } catch (Exception exception) {
             exception.printStackTrace();
         }

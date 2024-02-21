@@ -13,8 +13,8 @@ public interface BaseRepository<MappingType, Identifier> {
     Collection<MappingType> findAll();
     Optional<MappingType> findByIdentifier(@NonNull Identifier identifier);
     Collection<MappingType> findByCondition(@NonNull Condition condition);
-    CompletableFuture<Void> deleteByIdentifier(@NonNull Identifier identifier);
-    CompletableFuture<Void> save(@NonNull MappingType mappingType);
+    void deleteByIdentifier(@NonNull Identifier identifier);
+    void save(@NonNull MappingType mappingType);
     WonsiTable<MappingType> getWrappedTable();
 
 }

@@ -6,6 +6,7 @@ import net.wonsi.column.type.*;
 
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.sql.ResultSet;
 import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.HashMap;

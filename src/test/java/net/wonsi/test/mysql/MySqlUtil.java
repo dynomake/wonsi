@@ -1,6 +1,5 @@
 package net.wonsi.test.mysql;
 
-import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 
@@ -13,7 +12,9 @@ public class MySqlUtil {
 
     @SneakyThrows
     public Connection create() {
-        var url = "jdbc:h2:mem:";
-        return DriverManager.getConnection(url);
+        String url = "jdbc:mysql://sql11.freemysqlhosting.net:3306/sql111?useSSL=true";
+        Class.forName("com.mysql.cj.jdbc.Driver");
+
+        return DriverManager.getConnection(url, "sql111", "i_will_never_show_it");
     }
 }

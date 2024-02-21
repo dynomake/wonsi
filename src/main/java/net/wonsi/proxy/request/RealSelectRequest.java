@@ -37,9 +37,7 @@ public class RealSelectRequest<T> implements SelectRequest<T> {
     public ExecutedReturningAction<T> sync() {
         try {
             PreparedStatement statement = connection
-                    .prepareStatement("SELECT * FROM " + tableName + " WHERE " + condition + (limit > 0 ? " LIMIT ?" : ""));
-
-            statement.setInt(1, limit);
+                    .prepareStatement("SELECT * FROM " + tableName + " WHERE " + condition + (limit > 0 ? " LIMIT " + limit : ""));
 
             return new RealExecutedReturningAction<T>(ExecutorUtil.getResult(statement, connection), deserializer);
         } catch (Exception exception) {

@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'io.github.dynomake'
-version '1.0.5'
+version '1.0.6'
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }
@@ -21,7 +21,7 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok:1.18.24'
     testCompileOnly 'org.projectlombok:lombok:1.18.24'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.24'
-    testImplementation group: 'mysql', name: 'mysql-connector-java', version: '5.1.47'
+    testImplementation 'mysql:mysql-connector-java:8.0.31'
 }
 
 

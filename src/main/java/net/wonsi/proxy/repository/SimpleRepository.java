@@ -21,6 +21,7 @@ import java.util.concurrent.CompletableFuture;
 public class SimpleRepository<MappingType, Identifier>
         implements BaseRepository<MappingType, Identifier> {
 
+
     private final WonsiTable<MappingType> wrappedTable;
     private final String idColumnName;
 
@@ -40,17 +41,17 @@ public class SimpleRepository<MappingType, Identifier>
     }
 
     @Override
-    public CompletableFuture<Void> deleteByIdentifier(@NonNull Identifier identifier) {
-        return wrappedTable.delete()
+    public void deleteByIdentifier(@NonNull Identifier identifier) {
+        wrappedTable.delete()
                 .where(Condition.is(idColumnName, identifier))
                 .limit(1)
-                .async();
+                .sync();
     }
 
 
     @Override
-    public CompletableFuture<Void> save(@NonNull MappingType mappingType) {
-        return wrappedTable.insert()
+    public void save(@NonNull MappingType mappingType) {
+        wrappedTable.insert()
                 .updateOnDuplicate()
                 .data(map -> {
                     for (Field field : mappingType.getClass().getDeclaredFields()) {
@@ -64,6 +65,6 @@ public class SimpleRepository<MappingType, Identifier>
                         }
                     }
                 })
-                .async();
+                .sync();
     }
 }
