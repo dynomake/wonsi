@@ -25,7 +25,7 @@ public class RealSelectRequest<T> implements SelectRequest<T> {
         this.tableName = tableName;
         this.deserializer = deserializer;
         condition = "1";
-        limit = 10;
+        limit = -1;
     }
 
     @Override
@@ -37,7 +37,7 @@ public class RealSelectRequest<T> implements SelectRequest<T> {
     public ExecutedReturningAction<T> sync() {
         try {
             PreparedStatement statement = connection
-                    .prepareStatement("SELECT * FROM " + tableName + " WHERE " + condition + " LIMIT ?");
+                    .prepareStatement("SELECT * FROM " + tableName + " WHERE " + condition + (limit > 0 ? " LIMIT ?" : ""));
 
             statement.setInt(1, limit);
 

@@ -9,6 +9,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface WonsiColumn {
 
-    String name();
+    String name() default "null_wonsidv";
     int length() default 64;
 }

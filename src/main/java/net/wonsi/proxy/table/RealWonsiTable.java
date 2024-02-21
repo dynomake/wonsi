@@ -5,10 +5,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 import net.wonsi.api.mapping.WonsiColumn;
 import net.wonsi.api.mapping.WonsiPrimary;
+import net.wonsi.api.repository.BaseRepository;
 import net.wonsi.api.request.*;
 import net.wonsi.api.result.ExecutedReturningAction;
 import net.wonsi.api.table.WonsiTable;
 import net.wonsi.column.ColumnUtil;
+import net.wonsi.proxy.repository.SimpleRepository;
 import net.wonsi.proxy.request.RealDeleteRequest;
 import net.wonsi.proxy.request.RealInsertRequest;
 import net.wonsi.proxy.request.RealSelectRequest;
@@ -78,15 +80,21 @@ public class RealWonsiTable<T> implements WonsiTable<T> {
     }
 
     @Override
+    public <Id> BaseRepository<T, Id> createRepository(@NonNull Class<Id> idType) {
+        return new SimpleRepository<>(this, primaryKeyName);
+    }
+
+    @Override
     public void createIfNotExits(Class<T> tclass) {
         List<String> arguments = new ArrayList<>();
 
         for (Field field : tclass.getDeclaredFields()) {
             WonsiColumn column = field.getAnnotation(WonsiColumn.class);
+            val name = column.name().equals("null_wonsidv") ? field.getName() : column.name();
             val primary = (field.getAnnotation(WonsiPrimary.class) != null ? " PRIMARY KEY" : "");
-            arguments.add(column.name() + ' ' + ColumnUtil.get(field.getType()).convertToString(column.length()) + primary);
+            arguments.add(name + ' ' + ColumnUtil.get(field.getType()).convertToString(column.length()) + primary);
             if (!primary.isEmpty())
-                primaryKeyName = column.name();
+                primaryKeyName = name;
         }
 
         StringBuilder query = new StringBuilder("CREATE TABLE IF NOT EXISTS `");
