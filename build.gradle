@@ -3,7 +3,7 @@ plugins {
     id 'maven-publish'
 }
 
-group 'io.github.dynomake'
+group 'space.dynomake'
 version '1.0.7'
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'

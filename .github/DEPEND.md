@@ -15,7 +15,7 @@ repositories {
 
 dependencies {
     // other depends
-    implementation 'io.github.dynomake:wonsi:1.0.7'
+    implementation 'space.dynomake:wonsi:1.0.7'
 }
 ```
 
@@ -35,7 +35,7 @@ Depend:
 ```xml
 
 <dependency>
-    <groupId>io.github.dynomake</groupId>
+    <groupId>space.dynomake</groupId>
     <artifactId>wonsi</artifactId>
     <version>1.0.7</version>
 </dependency>
