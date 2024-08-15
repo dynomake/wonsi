@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'io.github.dynomake'
-version '1.0.6'
+version '1.0.7'
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }
@@ -28,8 +28,9 @@ dependencies {
 publishing {
     repositories {
         maven {
-            name = "clojars"
-            url = uri("https://clojars.org/repo")
+            name = "dynomakeRepoReleases"
+            url = uri("https://maven.dynomake.space/releases")
+
             credentials {
                 username = "$System.env.deployUser"
                 password = "$System.env.deployToken"

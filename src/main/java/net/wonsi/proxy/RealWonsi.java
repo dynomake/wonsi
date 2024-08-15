@@ -24,18 +24,31 @@ public class RealWonsi implements Wonsi {
     public <T> WonsiTable<T> getTable(@NonNull Class<T> tClass, @NonNull Function<ResultSet, T> deserializer) {
         Table tableAnnotation = tClass.getAnnotation(Table.class);
 
-        if (tableAnnotation == null) throw new IllegalArgumentException("Class don't has annotation @Table, please read documentation!");
+        if (tableAnnotation == null)
+            throw new IllegalArgumentException("Class don't has annotation @Table, please read documentation!");
 
-
-        WonsiTable<T> table = new RealWonsiTable<>(connection, deserializer, tableAnnotation.value());
-        table.createIfNotExits(tClass);
-
-        return table;
+        return getTable(tClass, deserializer, tableAnnotation.value());
     }
 
     @Override
     public <T> WonsiTable<T> getTable(@NonNull Class<T> tClass) {
-        return getTable(tClass, (resultSet) -> {
+        return getTable(tClass, createDeserializer(tClass));
+    }
+
+    @Override
+    public <T> WonsiTable<T> getTable(@NonNull Class<T> tClass, @NonNull Function<ResultSet, T> deserializer, @NonNull String tableName) {
+        WonsiTable<T> table = new RealWonsiTable<>(connection, deserializer, tableName);
+        table.createIfNotExits(tClass);
+        return table;
+    }
+
+    @Override
+    public <T> WonsiTable<T> getTable(@NonNull Class<T> tClass, @NonNull String tableName) {
+        return getTable(tClass, createDeserializer(tClass), tableName);
+    }
+
+    private <T> Function<ResultSet, T> createDeserializer(@NonNull Class<T> tClass) {
+        return (resultSet) -> {
             try {
                 T object = tClass.newInstance();
 
@@ -47,7 +60,7 @@ public class RealWonsi implements Wonsi {
 //                    field.getType().cast(
                     field.set(object, value.getClass().isAssignableFrom(field.getType()) ? value :
                             value.getClass().equals(Long.class) ? (((Long) value).longValue()) :
-                            field.getType().cast(value));
+                                    field.getType().cast(value));
                 }
 
                 return object;
@@ -55,7 +68,6 @@ public class RealWonsi implements Wonsi {
                 exception.printStackTrace();
                 return null;
             }
-        });
+        };
     }
-
 }

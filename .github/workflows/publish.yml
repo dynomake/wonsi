@@ -23,7 +23,7 @@ jobs:
       - name: Build and Publish
         uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
         env:
-          deployUser: ${{ secrets.CLOJARS_USER }}
-          deployToken: ${{ secrets.CLOJARS_TOKEN }}
+          deployUser: ${{ secrets.MAVEN_USER }}
+          deployToken: ${{ secrets.MAVEN_TOKEN }}
         with:
           arguments: publish

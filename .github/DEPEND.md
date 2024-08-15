@@ -1,6 +1,5 @@
 ## | `Wonsi - Add as depend:`
 
-[![Clojars Project](https://img.shields.io/clojars/v/io.github.dynomake/wonsi.svg)](https://clojars.org/io.github.dynomake/wonsi)
 
 Here is how to add this framework depending on your project.
 ### | `Gradle`:
@@ -9,14 +8,14 @@ If you use Gradle with Groovy, then here is an example of adding dependencies:
 repositories {
     // other repositories
     maven {
-        name = "clojars.org"
-        url = uri("https://repo.clojars.org")
+        name = "dynomakeRepo"
+        url = uri("https://maven.dynomake.space/releases")
     }
 }
 
 dependencies {
     // other depends
-    implementation 'io.github.dynomake:wonsi:VERSION'
+    implementation 'io.github.dynomake:wonsi:1.0.7'
 }
 ```
 
@@ -26,8 +25,8 @@ Repository:
 
 ```xml
 <repository>
-    <id>clojars.org</id>
-    <url>https://repo.clojars.org</url>
+    <id>dynomake-repo</id>
+    <url>https://maven.dynomake.space/releases</url>
 </repository>
 ```
 
@@ -38,6 +37,6 @@ Depend:
 <dependency>
     <groupId>io.github.dynomake</groupId>
     <artifactId>wonsi</artifactId>
-    <version>VERSION</version>
+    <version>1.0.7</version>
 </dependency>
 ```
